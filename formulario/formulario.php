@@ -17,6 +17,7 @@
     <form action="" method="post">
         <p>
             Nome: <input type="text" name="nome"><span id="alerta"> *</span>
+            <?php $nome = !empty($nome) ? "" : $temp ?>
         </p>
         <p>
             E-mail: <input type="text" name="email"><span id="alerta"> *</span>
@@ -30,12 +31,14 @@
         <p>
             Gênero: <input type="radio" name="genero" value="feminimo" checked>Feminino
             <input type="radio" name="genero" value="masculino">Masculino
-            <input type="radio" name="genero" value="outro">Outro
+            <input type="radio" name="genero" value="outros">Outro
         </p>
         <p>
             <button type="submit" name="enviar">Enviar</button>
         </p>
     </form>
+
+  
 
     <?php
         $nome = $_POST['nome'];
@@ -45,22 +48,37 @@
         $genero = $_POST['genero'];
         $enviar = $_POST['enviar'];
         $vazio = "Não informado";
+        $temp = "Preencha o nome";
 
         if(isset($enviar)){
-            if(empty($nome)){
-                echo "O nome deve ser preenchido";
+            if(empty($nome) || strlen($nome) < 3 || strlen($nome) > 30){
+                echo "<p id=\"alerta\">Campo nome deve ser preenchido corretamente</p>";
+                //die();
             }
-            elseif(empty($email)){
-                echo "O email deve ser preenchido";
+            elseif(empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)){
+                echo "<p id=\"alerta\">O email deve ser preenchido</p>";
+                //die();
+            }
+            elseif(!empty($site) && !filter_var($site, FILTER_VALIDATE_URL)){
+                echo "A url do site dever ser preenchida corretamente";
+                //die();
+            }
+            elseif(!empty($genero)){
+                
+                if($genero != "feminino" || $genero != "masculino" || $genero != "outros"){ 
+                    echo "<p id=\"alerta\">Preencha corretamente o gênero</p>";
+                   // die();
+                   //var_dump($genero);
+                }
             }
             
-            else{
-                echo "Nome: " . $nome . "<br>";
-                echo "E-mail: " . $email . "<br>";
-                echo "WebSite: " . $site = !empty($site) ? $site . "<br>": "Não informado". "<br>";
-                echo "Comentário: " . $comentario = !empty($comentario) ? $comentario . "<br>" : "Não informado" . "<br>";
-                echo "Gênero: " . $genero = !empty($genero) ? $genero : "Não informado" . "<br>";
-            }
+        else{
+            echo "Nome: " . $nome . "<br>";
+            echo "E-mail: " . $email . "<br>";
+            echo "WebSite: " . $site = !empty($site) ? $site . "<br>": "Não informado". "<br>";
+            echo "Comentário: " . $comentario = !empty($comentario) ? $comentario . "<br>" : "Não informado" . "<br>";
+            echo "Gênero: " . $genero = !empty($genero) ? $genero : "Não informado" . "<br>";
+        }
             
         }
         
